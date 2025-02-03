@@ -34,4 +34,8 @@ fi
 echo "正在构建 Docker 镜像 $IMAGE_NAME..."
 docker build -t "$IMAGE_NAME" .
 
+docker run -t --name lazydev-desktop-export lazydev-desktop ls /
+docker export lazydev-desktop-export > ./lazydev-tmp.tar
+docker rm lazydev-desktop-export
+
 echo "脚本执行完毕！"

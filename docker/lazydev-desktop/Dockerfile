@@ -22,6 +22,8 @@ RUN apk update && \
     chmod 755 /run && \
     rc-update add docker default && \
     rc-update add sshd default && \
+    chmod +x /etc/init.d/lazydev && \
+    rc-update add lazydev default && \
     # 清理缓存
     rm -rf /var/cache/apk/*
 

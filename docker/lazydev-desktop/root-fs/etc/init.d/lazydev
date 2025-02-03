@@ -1,0 +1,31 @@
+#!/sbin/openrc-run
+
+# 服务元数据
+name="lazydev"
+description="LazyDev Development Environment Service"
+command="/usr/bin/lazydev"
+command_args="--daemon"
+pidfile="/var/run/${name}.pid"
+
+# 依赖关系（例如需要 Docker 先启动）
+depend() {
+    need docker
+}
+
+# 可选：启动前预处理
+start_pre() {
+    checkpath --directory --owner root:root --mode 0755 /var/run/lazydev
+}
+
+# 可选：自定义日志
+logger_command="logger -t lazydev"
+
+start() {
+    ebegin "Starting lazydev service"
+    eend 0
+}
+
+stop () {
+    ebegin "Stopping lazydev service"
+    eend 0
+}
