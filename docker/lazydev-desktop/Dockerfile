@@ -18,6 +18,7 @@ RUN apk update && \
     docker-compose \
     sudo \
     shadow \
+    openssh-client \
     openssh-server \
     openrc && \
     # 确保关键目录权限正确
