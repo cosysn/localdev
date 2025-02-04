@@ -9,6 +9,8 @@ RUN apk update && \
     apk add --no-cache \
     vim \
     bash \
+    bash-doc \
+    bash-completion \
     git \
     python3 \
     docker \
@@ -19,6 +21,7 @@ RUN apk update && \
     openssh-server \
     openrc && \
     # 确保关键目录权限正确
+    sed -i 's/ash/bash/g' /etc/passwd && \
     chmod 755 /run && \
     rc-update add docker default && \
     rc-update add sshd default && \
