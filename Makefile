@@ -23,6 +23,8 @@ build-binaries:
 	@echo "Building binaries..."
 	mkdir -p $(BIN_DIR)
 	
+	go mod tidy
+
 	# 编译 Windows 客户端
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 \
 		go build -ldflags="-s -w" -o $(BIN_DIR)/lazydev.exe ./cmd/lazydev
