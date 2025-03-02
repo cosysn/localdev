@@ -78,27 +78,27 @@ func ensureWSLDir() error {
 }
 
 func getInstallBasePath() (string, error) {
-    // 获取当前可执行文件路径
-    exePath, err := os.Executable()
-    if err != nil {
-        return "", fmt.Errorf("无法获取可执行文件路径: %w", err)
-    }
-    
-    // 转换路径格式（处理可能的符号链接）
-    exePath, err = filepath.EvalSymlinks(exePath)
-    if err != nil {
-        return "", fmt.Errorf("路径解析失败: %w", err)
-    }
-    
-    // 确定基础路径：可执行文件所在目录下的 wsl 子目录
-    baseDir := filepath.Join(filepath.Dir(exePath), "wsl")
-    
-    // 验证路径有效性
-    if strings.ContainsAny(baseDir, ";&%$") {
-        return "", fmt.Errorf("路径包含非法字符: %s", baseDir)
-    }
-    
-    return baseDir, nil
+	// 获取当前可执行文件路径
+	exePath, err := os.Executable()
+	if err != nil {
+		return "", fmt.Errorf("无法获取可执行文件路径: %w", err)
+	}
+
+	// 转换路径格式（处理可能的符号链接）
+	exePath, err = filepath.EvalSymlinks(exePath)
+	if err != nil {
+		return "", fmt.Errorf("路径解析失败: %w", err)
+	}
+
+	// 确定基础路径：可执行文件所在目录下的 wsl 子目录
+	baseDir := filepath.Join(filepath.Dir(exePath), "wsl")
+
+	// 验证路径有效性
+	if strings.ContainsAny(baseDir, ";&%$") {
+		return "", fmt.Errorf("路径包含非法字符: %s", baseDir)
+	}
+
+	return baseDir, nil
 }
 
 func checkRequiredFiles() error {
@@ -151,10 +151,10 @@ func wslDistroExists(name string) bool {
 
 func importWslDistros() error {
 	// 获取动态安装路径
-    basePath, err := getInstallBasePath()
-    if err != nil {
-        return err
-    }
+	basePath, err := getInstallBasePath()
+	if err != nil {
+		return err
+	}
 
 	// 检查并导入 Desktop 镜像
 	desktopPath := filepath.Join(basePath, wslDesktopName)
@@ -171,7 +171,6 @@ func importWslDistros() error {
 	} else {
 		fmt.Println("lazydev-desktop 已存在，跳过导入")
 	}
-
 
 	// 检查并导入 Data 镜像
 	desktopDataPath := filepath.Join(basePath, wslDataName)
@@ -194,7 +193,7 @@ func importWslDistros() error {
 
 func initializeEnvironment() error {
 	fmt.Println("正在初始化环境...")
-	cmd := exec.Command("wsl", "-d", wslDesktopName, "/opt/lazydev/scripts/init.sh")
+	cmd := exec.Command("wsl", "-d", wslDesktopName, "bash /opt/lazydev/scripts/init.sh")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()

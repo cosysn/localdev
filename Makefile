@@ -36,15 +36,24 @@ build-binaries:
 # 构建 Docker 镜像
 build-images:
 	@echo "Building Docker images..."
+
+	echo "Version: $(VERSION)" > $(DIST_DIR)/VERSION
+	echo "BuildTime: $(BUILD_TIME)" >> $(DIST_DIR)/VERSION
 	
 	# 构建 lazydev-desktop
-	docker build -t lazydev-desktop:$(VERSION) -f docker/lazydev-desktop/openeuler/Dockerfile . 
+	mkdir -p $(DIST_DIR)/lazydev-desktop/
+	cp -rf docker/lazydev-desktop/fedora/* $(DIST_DIR)/lazydev-desktop/
+	cp $(BIN_DIR)/lazyd $(DIST_DIR)/lazydev-desktop/root-fs/opt/lazydev/bin/
+	cp $(DIST_DIR)/VERSION $(DIST_DIR)/lazydev-desktop/root-fs/opt/lazydev/
+	docker build -t lazydev-desktop:$(VERSION) -f $(DIST_DIR)/lazydev-desktop/Dockerfile $(DIST_DIR)/lazydev-desktop/
 	docker create --name temp-build lazydev-desktop:$(VERSION)
 	docker export temp-build -o $(DIST_DIR)/lazydev-desktop.tar
 	docker rm -f temp-build
 	
 	# 构建 lazydev-desktop-data
-	docker build -t lazydev-desktop-data:$(VERSION) -f docker/lazydev-desktop-data/Dockerfile .
+	mkdir -p $(DIST_DIR)/lazydev-desktop-data/
+	cp -rf docker/lazydev-desktop-data/* $(DIST_DIR)/lazydev-desktop-data/
+	docker build -t lazydev-desktop-data:$(VERSION) -f $(DIST_DIR)/lazydev-desktop-data/Dockerfile $(DIST_DIR)/lazydev-desktop-data/
 	docker create --name temp-data-build lazydev-desktop-data:$(VERSION)
 	docker export temp-data-build -o $(DIST_DIR)/lazydev-desktop-data.tar
 	docker rm -f temp-data-build
@@ -55,22 +64,18 @@ package:
 	mkdir -p $(PKG_DIR)
 	
 	# 复制必要文件
-	cp -r $(BIN_DIR) $(PKG_DIR)
+	cp -r $(BIN_DIR)/lazydev.exe $(PKG_DIR)
 	cp $(DIST_DIR)/*.tar $(PKG_DIR)
-	cp -r docker/lazydev-desktop/scripts $(PKG_DIR)
 	
 	# 创建版本文件
 	echo "Version: $(VERSION)" > $(PKG_DIR)/VERSION
 	echo "BuildTime: $(BUILD_TIME)" >> $(PKG_DIR)/VERSION
-	
-	# 制作 ZIP 包
-	zip -jr $(DIST_DIR)/lazydev-$(VERSION).zip $(PKG_DIR)/*
 
 # Windows 安装包 (需要预先安装 Inno Setup)
 installer:
 	@echo "Building Windows installer..."
 	mkdir -p $(INSTALLER_DIR)
-	
+
 	# 生成安装脚本
 	sed 's/{{VERSION}}/$(VERSION)/g' installer.template.iss > $(INSTALLER_DIR)/installer.iss
 	
