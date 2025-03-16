@@ -42,7 +42,8 @@ build-images:
 	
 	# 构建 lazydev-desktop
 	mkdir -p $(DIST_DIR)/lazydev-desktop/
-	cp -rf docker/lazydev-desktop/fedora/* $(DIST_DIR)/lazydev-desktop/
+	cp -rf docker/lazydev-desktop/debain/* $(DIST_DIR)/lazydev-desktop/
+	chmod a+r $(DIST_DIR)/lazydev-desktop/root-fs/etc/apt/keyrings/docker.asc
 	cp $(BIN_DIR)/lazyd $(DIST_DIR)/lazydev-desktop/root-fs/opt/lazydev/bin/
 	cp $(DIST_DIR)/VERSION $(DIST_DIR)/lazydev-desktop/root-fs/opt/lazydev/
 	docker build -t lazydev-desktop:$(VERSION) -f $(DIST_DIR)/lazydev-desktop/Dockerfile $(DIST_DIR)/lazydev-desktop/
