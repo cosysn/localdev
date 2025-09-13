@@ -26,3 +26,6 @@ if [ -d /etc/profile.d ]; then
 fi
 
 alias ll='ls -alF'
+
+cd /mnt/wsl/lazydev-desktop-data
+

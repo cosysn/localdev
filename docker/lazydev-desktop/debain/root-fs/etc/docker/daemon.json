@@ -2,5 +2,6 @@
     "registry-mirrors": [
         "https://docker.1ms.run",
         "https://docker.xuanyuan.me"
-    ]
+    ],
+    "data-root": "/mnt/wsl/lazydev-desktop-data/docker"
 }
