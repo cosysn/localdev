@@ -27,5 +27,4 @@ fi
 
 alias ll='ls -alF'
 
-cd /mnt/wsl/lazydev-desktop-data
-
+cd /root/
