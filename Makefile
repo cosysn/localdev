@@ -1,37 +1,37 @@
 # Makefile for LazyDev project
 VERSION := 1.0.0
 BUILD_TIME := $(shell date +%Y%m%d%H%M%S)
-DIST_DIR := dist
-BIN_DIR := $(DIST_DIR)/binaries
+DIST_DIR := build
+BIN_DIR := $(DIST_DIR)/bin
 PKG_DIR := $(DIST_DIR)/pkg
 INSTALLER_DIR := installer
 
-.PHONY: all clean build-binaries build-images package installer
+.PHONY: all clean build-binaries
 
-all: clean build-binaries build-images package
+all: clean build-binaries
 
 # 清理构建产物
 clean:
 	@echo "Cleaning build artifacts..."
-	rm -rf $(DIST_DIR)/*
-	rm -rf $(INSTALLER_DIR)
-	docker rm -f temp-build || true
-	docker rm -f temp-data-build || true
+	rm -rf $(DIST_DIR)/bin/codepod
+# 	rm -rf $(INSTALLER_DIR)
+# 	docker rm -f temp-build || true
+# 	docker rm -f temp-data-build || true
 
 # 编译二进制文件
 build-binaries:
 	@echo "Building binaries..."
-	mkdir -p $(BIN_DIR)
-	
-	go mod tidy
 
-	# 编译 Windows 客户端
-	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 \
-		go build -ldflags="-s -w" -o $(BIN_DIR)/lazydev.exe ./cmd/lazydev
-	
-	# 编译 Linux 守护进程
+# 	go mod tidy
+
+# 编译 Windows 客户端
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 \
-		go build -ldflags="-s -w" -o $(BIN_DIR)/lazyd ./cmd/lazyd
+		go build -ldflags="-s -w" -o $(BIN_DIR)/codepod ./cmd/cli
+	
+# 编译 Linux 守护进程
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 \
+		go build -ldflags="-s -w" -o $(BIN_DIR)/coderd ./cmd/coderd
+
 
 # 构建 Docker 镜像
 build-images:

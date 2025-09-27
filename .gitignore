@@ -3,4 +3,5 @@
 
 *.zip
 
-dist/
+build/bin/*
+build/package/*

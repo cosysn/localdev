@@ -1,11 +1,11 @@
 package main
 
 import (
-        "fmt"
-        "os"
+	"fmt"
+	"os"
 
-        "github.com/spf13/cobra"
-        "github.com/cosysn/lazydev/pkg/installer"
+	"github.com/cosysn/lazydev/pkg/installer"
+	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
@@ -27,6 +27,7 @@ var installCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(installCmd)
+	rootCmd.AddCommand(NewVersionCmd())
 }
 
 func main() {
